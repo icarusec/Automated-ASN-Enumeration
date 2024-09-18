@@ -27,6 +27,5 @@ This script automates the process of enumerating ASN (Autonomous System Number) 
   - `json`
   - `termcolor`
 
-### Install Python dependencies:
-```bash
-pip install termcolor
+## Usage 
+`python asn_enum.py -a <ASN NUM>(comma separated)`
