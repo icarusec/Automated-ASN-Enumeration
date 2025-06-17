@@ -7,7 +7,7 @@ This script automates the process of enumerating ASN (Autonomous System Number) 
 - **ASN Enumeration**: Uses `asnmap` to enumerate IP addresses for the given ASN numbers.
 - **Port Scanning**: Utilizes `naabu` to scan for open ports on the enumerated IP addresses and parse the results in JSON format.
 - **Nmap Service Scanning**: Dynamically runs Nmap to perform service scans on the open ports found by `naabu` for each IP address.
-- **Web Server Identification**: Identifies IP addresses hosting web servers by checking if ports 80, 443, or 8080 are open.
+- **Web Server Identification**: Identifies IP addresses hosting web servers by checking if ports 80, 443 , 8000, 8443, 8080, 5000, 8888 or 3000 are open.
 - **Live Website Detection**: Generates URLs from IP addresses and uses `httpx` to check if the websites are live, filtering responses with status codes 200, 301, or 302.
 - **Real-Time Output**: Displays the output of all commands (asnmap, naabu, nmap, httpx) in real-time for better visibility into the scanning process.
 - **Color-Coded Results**: Uses color coding to highlight important information, such as live web servers.
@@ -27,5 +27,10 @@ This script automates the process of enumerating ASN (Autonomous System Number) 
   - `json`
   - `termcolor`
 
-## Usage 
+## Usage
+
+- The `-a/--asn` and `-f/--file` options are mutually exclusive; use one or the other.
+
+`python asn_enum.py -f <asn_file.txt>`
+
 `python asn_enum.py -a <ASN NUM>(comma separated)`
