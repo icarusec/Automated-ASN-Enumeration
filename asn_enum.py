@@ -93,9 +93,9 @@ def identify_webservers(ip_ports_map):
     
     print(colored("Identifying web servers...", 'yellow'))
     
-    # Check if the IP has web server ports (80, 443, 8080) open
+    # Check if the IP has web server ports (${ports}) open
     for ip, ports in ip_ports_map.items():
-        if any(port in [80, 443, 8080] for port in ports):
+        if any(port in [80, 443, 8080, 8000, 8443, 3000, 5000, 8888] for port in ports):
             web_ips.add(ip)
 
     # Save web servers to the webservers file
@@ -122,8 +122,8 @@ def create_urls(web_ips):
 
 def check_live_websites(urls_file):
     print(colored("Checking live websites with httpx...", 'yellow'))
-    
-    httpx_command = f"httpx -l {urls_file} -status-code -mc 200,301,302 -o {final_file}"
+
+    httpx_command = f"httpx -l {urls_file} -status-code -mc 200,301,302,403 -o {final_file}"
     run_command_live(httpx_command)
 
 def main(asn_numbers):
@@ -161,9 +161,19 @@ def main(asn_numbers):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='ASN Enumeration Script')
-    parser.add_argument('-a', '--asn', type=str, required=True, help='Comma-separated ASN numbers')
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('-a', '--asn', type=str, help='Comma-separated ASN numbers')
+    group.add_argument('-f', '--file', type=str, help='File containing ASN numbers (one per line or comma-separated)')
 
     args = parser.parse_args()
-    asn_numbers = args.asn
+
+    if args.file:
+        # read ASN numbers from file
+        with open(args.file, 'r') as f:
+            lines = [line.strip() for line in f if line.strip()]
+            # support both one ASN per line and comma-separated :)
+            asn_numbers = ','.join([asn for line in lines for asn in line.split(',') if asn])
+    else:
+        asn_numbers = args.asn
     main(asn_numbers)
 
